@@ -1,0 +1,38 @@
+REM Script for uploading photos to zooniverse
+REM NOTE: This was written for use on a Windows computer
+REM All sections that start with "REM" are comments/remarks. Do not delete "REM"
+REM that has python v 3.9, pip, and panoptes client installed. 
+REM For more info see "README" in the Zooniverse GitHub folder
+
+REM All photos must be saved in one target folder location
+REM We must then create a .csv file that lists all files names that match the photos
+REM This script will automatically create that .csv, upload it, and upload the associated photos
+
+REM Change "[FOLDER]" to your photo folder location (full path including C:\)
+
+REM Launch your command prompt by clicking start, typing "CMD", then right clicking on command prompt and selecting "Run as administrator"
+REM Click "yes" on the prompt
+
+REM At the command line, copy and paste all of the code below up until the next comment, then press enter
+
+cd\ [FOLDER]
+dir > DCWildlifeManifest.csv
+
+REM After creating the .csv, navigate to the folder you made it in, and open it
+REM delete the excess data (date column) and excess rows (any rows that don't have photo names)
+REM This includes 2 extra metadata rows at the end of the file list
+REM Insert a row above the remaining data and name the first column "raw"
+REM Label the second column "image"
+REM in the second column, first cell, type =right(A2,len(A2)-4) and hit enter
+REM the cell should now have the shortened file name (just 3 letters, a few numbers, and .jpg)
+REM double click the bottom right corner of the cell to extend this to the bottom of the data sheet
+REM Return to your command prompt
+
+REM Here you will be prompted for login information. 
+REM See the folder on the server and the SSI login account page for login info (not shared here)
+panoptes configure
+
+panoptes subject-set create 12949 "[Your Project Photo Set Name Here]"
+
+REM You will be given a new number of the new subject set. Replace [NUMBER] below with this number.
+panoptes subject-set upload-subjects  [NUMBER] DCWildlifeManifest.csv
